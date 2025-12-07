@@ -1,46 +1,28 @@
-#pragma once
+#ifndef TYPE_TABLE_HPP
+#define TYPE_TABLE_HPP
+
 #include <string>
 #include <vector>
-#include <unordered_map>
-#include <optional>
+#include <map>
 
-class SymbolTable; // forward
-
-enum class TypeKind {
-    BASIC,
-    ARRAY,
-    STRUCT
-};
-
-struct TypeEntry {
+struct Type {
     int id;
-    TypeKind kind;
     std::string name;
     int size;
-    int elements = 1;
-    int baseTypeId = -1;
-    SymbolTable* structFields = nullptr;
+    int numElements; // Para arreglos
+    int baseTypeId;  // ID del tipo base si es arreglo, -1 si no
 };
 
 class TypeTable {
 private:
-    std::vector<TypeEntry> types;
-    int lastId = 0;
+    std::vector<Type> types;
+    int nextId;
 
 public:
-    // --- Creación de tipos ---
-    int addBasicType(const std::string& name, int size);
-    int addArrayType(int baseTypeId, int elements);
-    int addStructType(const std::string &name, SymbolTable* fields);
-
-    // --- Consultas ---
-    const TypeEntry& get(int id) const;
-
-    int getSize(int id) const;
-    int getNumElements(int id) const;
-    int getBaseType(int id) const;
-    SymbolTable* getStructFields(int id) const;
-
-    // Depuración
-    void print() const;
+    TypeTable();
+    int insertType(std::string name, int size);
+    int insertArrayType(std::string name, int baseTypeId, int numElements);
+    Type getType(int id) const;
 };
+
+#endif

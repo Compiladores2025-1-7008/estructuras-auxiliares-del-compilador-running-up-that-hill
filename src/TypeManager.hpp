@@ -1,28 +1,22 @@
-#pragma once
-#include "TypeTable.hpp"
+#ifndef TYPE_MANAGER_HPP
+#define TYPE_MANAGER_HPP
+
 #include <algorithm>
 
 class TypeManager {
 public:
-    // Prioridad para determinar tipo mayor
-    static int priority(const TypeTable &TT, int typeId) {
-        const auto &t = TT.get(typeId);
-        if (t.name == "char") return 1;
-        if (t.name == "int")  return 2;
-        if (t.name == "float")return 3;
-        return 0;
-    }
-
-  // Las funciones estáticas se implementan en el .hpp
-    // Devuelve el tipo mayor
-    static int maxType(const TypeTable &TT, int t1, int t2) ;
-
-    // Devuelve el tipo menor
-    static int minType(const TypeTable &TT, int t1, int t2);
-
-    // Ampliar: convertir tipo pequeño → mayor
-    static int ampliar(int dir, int tipo1, int tipo2);
-
-    // Reducir: convertir tipo grande → menor (requiere cuidado)
-    static int reducir(int dir, int tipo1, int tipo2);
+    // Retorna el tipo de mayor jerarquía
+    int maxType(int t1, int t2);
+    
+    // Retorna el tipo de menor jerarquía
+    int minType(int t1, int t2);
+    
+    // Simula conversión implícita
+    // Retorna el tipo destino si es válido, o -1 si no es posible
+    int amplify(int dir, int t1, int t2);
+    
+    // Simula conversión explícita
+    int reduce(int dir, int t1, int t2);
 };
+
+#endif

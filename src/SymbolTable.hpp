@@ -1,51 +1,37 @@
-#pragma once
-#include <unordered_map>
+#ifndef SYMBOL_TABLE_HPP
+#define SYMBOL_TABLE_HPP
+
 #include <string>
 #include <vector>
+#include <map>
 #include <optional>
 
-enum class Category {
-    VAR,
-    CONST,
-    STRUCT,
-    FUNCTION,
-    PARAM
+enum Category {
+    VarCategory,
+    FunctionCategory,
+    ParamCategory,
+    ConstCategory,
+    StructCategory
 };
 
-struct SymbolEntry {
+struct Symbol {
     std::string id;
     int typeId;
     Category category;
-    int address;
-    std::vector<int> params;
+    int dir; // Dirección de memoria
+    std::vector<int> params; // Lista de IDs de tipos de parámetros (para funciones)
 };
 
 class SymbolTable {
 private:
-    std::unordered_map<std::string, SymbolEntry> table;
+    std::map<std::string, Symbol> table;
 
 public:
-    bool insert(const SymbolEntry &entry);
-    // -----------------------------------------
-    // Consultas individuales simples
-    // -----------------------------------------
-    int getType(const std::string &id);
-
-    int getAddress(const std::string &id) ;
-
-    Category getCategory(const std::string &id);
-
-    std::vector<int> getParams(const std::string &id);
-
-    // -----------------------------------------
-    // Consulta completa (si necesitas todos los datos)
-    // -----------------------------------------
-    const SymbolEntry* lookup(const std::string &id) const {
-        auto it = table.find(id);
-        return (it != table.end()) ? &it->second : nullptr;
-    }
-
-    // Para imprimir/depurar
-    void print() const;
+    // Inserta un símbolo. 'params' es opcional (por defecto vacío)
+    void insert(std::string id, int typeId, Category category, int dir, std::vector<int> params = {});
+    
+    // Busca un símbolo
+    std::optional<Symbol> get(std::string id);
 };
 
+#endif

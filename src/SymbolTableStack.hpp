@@ -1,44 +1,30 @@
-#pragma once
+#ifndef SYMBOL_TABLE_STACK_HPP
+#define SYMBOL_TABLE_STACK_HPP
+
+#include "SymbolTable.hpp"
 #include <vector>
-#include <memory>
-#include "symbol_table.hpp"
+#include <memory> // Para smart pointers si decidimos usarlos, o raw pointers
 
 class SymbolTableStack {
 private:
-    std::vector<std::unique_ptr<SymbolTable*>> stack;
+
+    // Usamos vector como pila para poder iterar (buscar en base).
+    std::vector<SymbolTable*> stack; 
 
 public:
-    // Crea nuevo ámbito
-    void pushScope();
-
-    // Sale de un ámbito
-    void popScope();
-
-    //Sale el ámbito y retorna la referencia a la tabla de símbolos en la cima
-    SymbolTable *popSymbolTable();
-
-    // Insertar solo en tope
-    bool insertTop(const SymbolEntry &entry);
-
-    // Insertar solo en la base (ámbito global)
-    bool insertBase(const SymbolEntry &entry) ;
-
-    // Buscar solo en tope
-    SymbolEntry* lookupTop(const std::string &id);
-
-    // Buscar solo en la base
-    SymbolEntry* lookupBase(const std::string &id);
-
-    // Depuración
-    SymbolTable* currentScope() {
-        if (stack.empty()) return nullptr;
-        return stack.back().get();
-    }
-
-    SymbolTable* globalScope() {
-        if (stack.empty()) return nullptr;
-        return stack.front().get();
-    }
-
-    size_t levels() const { return stack.size(); }
+    SymbolTableStack();
+    
+    // Inserta una nueva tabla al tope
+    void push(SymbolTable* table);
+    
+    // Saca la tabla del tope y la devuelve
+    SymbolTable* pop();
+    
+    // Busca un símbolo: primero en el tope local, luego en la base global
+    std::optional<Symbol> lookup(std::string id);
+    
+    // Obtiene la tabla del tope para insertar símbolos en el ámbito actual
+    SymbolTable* top();
 };
+
+#endif
