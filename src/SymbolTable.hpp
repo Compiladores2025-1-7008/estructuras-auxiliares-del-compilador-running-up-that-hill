@@ -51,4 +51,4 @@ public:
     std::optional<Symbol> get(std::string id);
 };
 
-#endif // SYMBOL_TABLE_HPP
+#endif // !SYMBOL_TABLE_HPP
