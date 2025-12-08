@@ -14,4 +14,4 @@ public:
     std::string newLabel();
 };
 
-#endif
+#endif // !CODE_GENERATOR_HPP
