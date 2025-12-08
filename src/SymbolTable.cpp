@@ -22,6 +22,12 @@ void SymbolTable::insert(std::string id, int typeId, Category category, int dir,
     table[id] = s;
 }
 
+/**
+ * Busca un simbolo en la tabla de simbolo.
+ * Realiza una busqueda del identificador en la tabla y retorna la informacion completa del simbolo si existe.
+ * @param id Nombre del identificador a buscar
+ * @return std::optional<Symbol> Objeto Symbol con toda la informacion del simbolo
+ */
 std::optional<Symbol> SymbolTable::get(std::string id) {
     auto it = table.find(id);
     if (it != table.end()) {
